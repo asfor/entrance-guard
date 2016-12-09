@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Login</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/login.css' />
+</head>
+<body>
+<div id='box'>
+    <div id='middle'>
+        <form action='/entry' method='post'>
+            <h1>Login</h1>
+            <input type='text' name='username' placeholder='用户名' class='form-control'>
+            <input type='password' name='password' placeholder='密码' class='form-control'>
+
+            <% if(locals.msg) { %>
+                <div class='msg'><%= msg %></div>
+            <% } %>
+
+            <button type='submit' class='btn btn-primary'>登陆</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
