@@ -1,9 +1,6 @@
 // 顶部标题
 const title = '魔法系统'
 
-// 域名
-const domain = 'http://localhost:3000'
-
 // 侧边栏
 const sidebarItems = [{
 //     title: '发卡管理',
@@ -15,7 +12,7 @@ const sidebarItems = [{
     iconClass: 'head'
 },{
     title: '权限管理',
-    component: 'Property',
+    component: 'Permission',
     iconClass: 'unlock'
 },{
     title: '节点管理',
@@ -23,7 +20,7 @@ const sidebarItems = [{
     iconClass: 'grid'
 },{
     title: '出入记录',
-    component: 'Access',
+    component: 'Record',
     iconClass: 'paper'
 },{
 //     title: '门禁状态',
@@ -38,7 +35,7 @@ const sidebarItems = [{
 // 右上方退出按钮
 const exit = {
     title: '退出系统',
-    route: '/exit'
+    route: 'exit'
 }
 
 // 初始界面组件

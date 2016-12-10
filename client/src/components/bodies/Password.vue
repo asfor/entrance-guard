@@ -3,17 +3,17 @@
         <form>
             <div class="form-group">
                 <label>旧密码: </label>
-                <input type="password" class="form-control" v-model.lazy='oldPassword' placeholder='请输入旧密码'>
+                <input type="password" class="form-control" v-model='oldPassword' placeholder='请输入旧密码'>
             </div>
 
             <div class="form-group">
                 <label>新密码: </label>
-                <input type="password" class="form-control" v-model.lazy='newPassword' placeholder='请输入新密码'>
+                <input type="password" class="form-control" v-model='newPassword' placeholder='请输入新密码'>
             </div>
 
             <div class="form-group">
                 <label>确认密码: </label>
-                <input type="password" class="form-control" ref='repeat' v-model.lazy='repeatPassword' placeholder='请再次输入新密码'>
+                <input type="password" class="form-control" ref='repeat' v-model='repeatPassword' placeholder='请再次输入新密码'>
             </div>
 
             <div class="middle">

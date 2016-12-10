@@ -1,80 +1,33 @@
-var crypto = require('crypto')
 var express = require('express')
-var Supervisor = require('../model/db/supervisor')
-var {adminID, secret} = require('../config')
+var Supervisor = require('../model/supervisor')
+var Area = require('../model/area')
+var NodeInfo = require('../model/node_info')
+var UserInfo = require('../model/user_info')
+var UserPermission = require('../model/user_permission')
+var UserRecord = require('../model/user_record')
+
 var router = express.Router()
 
-// 采用 sha256 散列算法和 hex 编码
-function encrypt(value) {
-    return crypto
-        .createHmac('sha256', secret)
-        .update(value)
-        .digest('hex')
-}
+// 前三个不要改顺序，不然会无限重定向
+router.use('/login', Supervisor.loginPage)
+router.post('/entry', Supervisor.login)
+router.use(Supervisor.check)
+router.get('/', (req, res) => res.render('index'))
+router.get('/exit', Supervisor.exit)
 
-router.use('/login', (req, res) => {
-    res.render('login')
-})
+router.get('/nodes', NodeInfo.get)
+router.put('/nodes', NodeInfo.set)
+router.delete('/nodes', NodeInfo.del)
 
-router.post('/entry', (req, res) => {
-    Supervisor.findOne({_id: adminID}, (err, result) => {
-        const unknown = req.body
-        const real = result
+router.get('/permissions', UserPermission.get)
+router.post('/permissions', UserPermission.add)
+router.delete('/permissions', UserPermission.del)
 
-        unknown.password = encrypt(unknown.password)
+router.get('/areas', Area.get)
+router.get('/users', UserInfo.get)
+router.get('/records', UserRecord.get)
 
-        if(unknown.username === real.username && unknown.password === real.password) {
-            req.session.isLogged = true
-            res.redirect('/')
-        } else
-            res.render('login', { msg: '用户名或密码错误' })
-    })
-})
-
-// 登陆验证
-router.use((req, res, next) => {
-  if(!req.session.isLogged)
-    return res.redirect('/login')
-
-  next()
-})
-
-router.get('/', (req, res) => {
-    res.render('index')
-})
-
-// 退出登陆
-router.get('/exit', (req, res) => {
-    req.session.distroy((err) => {
-        res.redirect('/login')
-    })
-})
-
-// 修改密码
-router.put('/password', (req, res) => {
-    let {newPassword, oldPassword} = req.body
-    
-    res.setHeader('Content-Type', 'application/json')
-
-    new Promise((resolve, reject) => Supervisor.findOne({_id: adminID}, (err, result) => {
-        if(err) reject(err)
-        resolve(result)
-    })).then(({password}) => {
-        oldPassword = encrypt(oldPassword)
-
-        if(oldPassword !== password) {
-            res.status(403).send({msg: '原密码错误'})
-        } else {
-            newPassword = encrypt(newPassword)
-            Supervisor.update({_id: adminID}, {$set: {password: newPassword}}, (err) => {
-                if (err)    res.status(500).send({msg: '修改失败，请重试'})
-                else        res.status(200).send({msg: '修改成功'})
-            })
-        }
-    }).catch(err => res.status(500).send({msg: '数据库查询错误，请重试\n\n' + err}))
-})
-
-
+router.put('/password', Supervisor.resetPassword)
 
 router.get('/C', (req, res, next) => {
     Supervisor.create({

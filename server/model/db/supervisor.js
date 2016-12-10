@@ -13,4 +13,4 @@ var schemas = new Schema({
     }
 })
 
-module.exports = mongoose.model('Supervisor', schemas)
+module.exports = mongoose.model('supervisor', schemas)

@@ -8310,7 +8310,7 @@
 	__vue_exports__ = __webpack_require__(9)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(73)
+	var __vue_template__ = __webpack_require__(72)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -9764,9 +9764,6 @@
 	// 顶部标题
 	var title = '魔法系统';
 
-	// 域名
-	var domain = 'http://localhost:3000';
-
 	// 侧边栏
 	var sidebarItems = [{
 	    //     title: '发卡管理',
@@ -9786,7 +9783,7 @@
 	    iconClass: 'grid'
 	}, {
 	    title: '出入记录',
-	    component: 'Access',
+	    component: 'Record',
 	    iconClass: 'paper'
 	}, {
 	    //     title: '门禁状态',
@@ -9801,7 +9798,7 @@
 	// 右上方退出按钮
 	var exit = {
 	    title: '退出系统',
-	    route: '/exit'
+	    route: 'exit'
 	};
 
 	// 初始界面组件
@@ -10030,7 +10027,7 @@
 	__vue_exports__ = __webpack_require__(34)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(72)
+	var __vue_template__ = __webpack_require__(71)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -10129,15 +10126,15 @@
 
 	var _Node2 = _interopRequireDefault(_Node);
 
-	var _Access = __webpack_require__(55);
+	var _Record = __webpack_require__(55);
 
-	var _Access2 = _interopRequireDefault(_Access);
+	var _Record2 = _interopRequireDefault(_Record);
 
-	var _EntranceGuardState = __webpack_require__(60);
+	var _EntranceGuardState = __webpack_require__(61);
 
 	var _EntranceGuardState2 = _interopRequireDefault(_EntranceGuardState);
 
-	var _Password = __webpack_require__(65);
+	var _Password = __webpack_require__(66);
 
 	var _Password2 = _interopRequireDefault(_Password);
 
@@ -10160,7 +10157,7 @@
 	        Users: _Users2.default,
 	        Property: _Property2.default,
 	        Node: _Node2.default,
-	        Access: _Access2.default,
+	        Record: _Record2.default,
 	        EntranceGuardState: _EntranceGuardState2.default,
 	        Password: _Password2.default
 	    },
@@ -11209,13 +11206,37 @@
 	    name: 'node',
 	    data: function data() {
 	        return {
-	            floors: [],
-	            selected: undefined,
-	            roomNumber: '',
+	            areas: [],
+	            areaSelected: undefined,
+	            nodeName: '',
 	            nodes: []
 	        };
 	    },
-	    created: function created() {}
+
+
+	    methods: {
+	        onSearch: function onSearch() {
+	            var _this = this;
+
+	            if (!areaSelected) alert('请选择区域!');else fetch('/nodes?area=' + this.areaSelected + '&nodeName=' + this.nodeName).then(function (response) {
+	                return response.json();
+	            }).then(function (_ref) {
+	                var data = _ref.data;
+	                return _this.records = data;
+	            });
+	        }
+	    },
+
+	    mounted: function mounted() {
+	        var _this2 = this;
+
+	        fetch('/areas').then(function (response) {
+	            return response.json();
+	        }).then(function (_ref2) {
+	            var data = _ref2.data;
+	            return _this2.areas = data;
+	        });
+	    }
 	};
 
 /***/ },
@@ -11229,17 +11250,17 @@
 	    attrs: {
 	      "role": "form"
 	    }
-	  }, [_h('label', ["楼层: "]), " ", _h('select', {
+	  }, [_h('label', ["区域："]), " ", _h('select', {
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
-	      value: (_vm.selected),
-	      expression: "selected"
+	      value: (_vm.areaSelected),
+	      expression: "areaSelected"
 	    }],
 	    staticClass: "form-control",
 	    on: {
 	      "change": function($event) {
-	        _vm.selected = Array.prototype.filter.call($event.target.options, function(o) {
+	        _vm.areaSelected = Array.prototype.filter.call($event.target.options, function(o) {
 	          return o.selected
 	        }).map(function(o) {
 	          var val = "_value" in o ? o._value : o.value;
@@ -11247,12 +11268,12 @@
 	        })[0]
 	      }
 	    }
-	  }, [_vm._l((_vm.floors), function(floor) {
+	  }, [_vm._l((_vm.areas), function(area) {
 	    return _h('option', {
 	      domProps: {
-	        "value": floor.value
+	        "value": area.no
 	      }
-	    }, ["\n                " + _vm._s(floor.name) + "\n            "])
+	    }, ["\n                " + _vm._s(area.name) + "\n            "])
 	  })]), " ", _h('label', {
 	    staticStyle: {
 	      "margin-left": "20px"
@@ -11261,8 +11282,8 @@
 	    directives: [{
 	      name: "model",
 	      rawName: "v-model",
-	      value: (_vm.roomNumber),
-	      expression: "roomNumber"
+	      value: (_vm.nodeName),
+	      expression: "nodeName"
 	    }],
 	    staticClass: "form-control",
 	    attrs: {
@@ -11270,12 +11291,12 @@
 	      "placeholder": "房间编号"
 	    },
 	    domProps: {
-	      "value": _vm._s(_vm.roomNumber)
+	      "value": _vm._s(_vm.nodeName)
 	    },
 	    on: {
 	      "input": function($event) {
 	        if ($event.target.composing) { return; }
-	        _vm.roomNumber = $event.target.value
+	        _vm.nodeName = $event.target.value
 	      }
 	    }
 	  }), " ", _h('button', {
@@ -11283,7 +11304,7 @@
 	    on: {
 	      "click": function($event) {
 	        $event.preventDefault();
-	        _vm.search($event)
+	        _vm.onSearch($event)
 	      }
 	    }
 	  }, ["查询"])]), " ", " ", _h('table', {
@@ -11398,7 +11419,7 @@
 	__vue_exports__ = __webpack_require__(58)
 
 	/* template */
-	var __vue_template__ = __webpack_require__(59)
+	var __vue_template__ = __webpack_require__(60)
 	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
 	if (
 	  typeof __vue_exports__.default === "object" ||
@@ -11410,7 +11431,7 @@
 	if (typeof __vue_options__ === "function") {
 	  __vue_options__ = __vue_options__.options
 	}
-	__vue_options__.__file = "D:\\web\\graduation-design\\client\\src\\components\\bodies\\Access.vue"
+	__vue_options__.__file = "D:\\web\\graduation-design\\client\\src\\components\\bodies\\Record.vue"
 	__vue_options__.render = __vue_template__.render
 	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 
@@ -11421,12 +11442,12 @@
 	  if (!hotAPI.compatible) return
 	  module.hot.accept()
 	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-4281eff8", __vue_options__)
+	    hotAPI.createRecord("data-v-4e9e8071", __vue_options__)
 	  } else {
-	    hotAPI.reload("data-v-4281eff8", __vue_options__)
+	    hotAPI.reload("data-v-4e9e8071", __vue_options__)
 	  }
 	})()}
-	if (__vue_options__.functional) {console.error("[vue-loader] Access.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+	if (__vue_options__.functional) {console.error("[vue-loader] Record.vue: functional components are not supported and should be defined in plain js files using render functions.")}
 
 	module.exports = __vue_exports__
 
@@ -11447,8 +11468,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4281eff8!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Access.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4281eff8!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Access.vue");
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4e9e8071!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Record.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4e9e8071!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Record.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -11473,563 +11494,125 @@
 
 /***/ },
 /* 58 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
+
+	__webpack_require__(59);
 
 	exports.default = {
 	    name: 'access',
 	    data: function data() {
 	        return {
-	            selected: undefined,
-	            nodes: []
+	            areaSelected: undefined,
+	            nodeSelected: undefined,
+	            areas: [],
+	            nodes: [],
+	            records: []
 	        };
 	    },
 
 
 	    methods: {
-	        search: function search() {}
-	    }
-	};
+	        onSearch: function onSearch() {
+	            var _this = this;
 
-/***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('div', {
-	    staticClass: "body body-access"
-	  }, [_h('form', {
-	    attrs: {
-	      "role": "form"
-	    }
-	  }, [_h('label', ["节点ID: "]), " ", _h('select', {
-	    directives: [{
-	      name: "model",
-	      rawName: "v-model",
-	      value: (_vm.selected),
-	      expression: "selected"
-	    }],
-	    staticClass: "form-control",
-	    on: {
-	      "change": function($event) {
-	        _vm.selected = Array.prototype.filter.call($event.target.options, function(o) {
-	          return o.selected
-	        }).map(function(o) {
-	          var val = "_value" in o ? o._value : o.value;
-	          return val
-	        })[0]
-	      }
-	    }
-	  }, [_vm._l((_vm.nodes), function(node) {
-	    return _h('option', {
-	      domProps: {
-	        "value": node.value
-	      }
-	    }, ["\n                " + _vm._s(node.name) + "\n            "])
-	  })]), " ", _h('button', {
-	    staticClass: "btn btn-default search",
-	    on: {
-	      "click": function($event) {
-	        $event.preventDefault();
-	        _vm.search($event)
-	      }
-	    }
-	  }, ["查询"])]), " ", " ", _vm._m(0)])
-	},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('table', {
-	    staticClass: "table table-striped"
-	  }, [_h('thead', [_h('tr', [_h('td', ["卡号"]), " ", _h('td', ["权限ID"]), " ", _h('td', ["节点"]), " ", _h('td', ["时间"])])]), " ", _h('tbody', [_h('tr', [_h('td', ["871928741"]), " ", _h('td', ["3"]), " ", _h('td', ["芙蓉1#518"]), " ", _h('td', ["2012-02-02"])])])])
-	}]}
-	module.exports.render._withStripped = true
-	if (false) {
-	  module.hot.accept()
-	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-4281eff8", module.exports)
-	  }
-	}
-
-/***/ },
-/* 60 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_exports__, __vue_options__
-	var __vue_styles__ = {}
-
-	/* styles */
-	__webpack_require__(61)
-
-	/* script */
-	__vue_exports__ = __webpack_require__(63)
-
-	/* template */
-	var __vue_template__ = __webpack_require__(64)
-	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
-	if (
-	  typeof __vue_exports__.default === "object" ||
-	  typeof __vue_exports__.default === "function"
-	) {
-	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
-	__vue_options__ = __vue_exports__ = __vue_exports__.default
-	}
-	if (typeof __vue_options__ === "function") {
-	  __vue_options__ = __vue_options__.options
-	}
-	__vue_options__.__file = "D:\\web\\graduation-design\\client\\src\\components\\bodies\\EntranceGuardState.vue"
-	__vue_options__.render = __vue_template__.render
-	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-
-	/* hot reload */
-	if (false) {(function () {
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  module.hot.accept()
-	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-4ad6f7e2", __vue_options__)
-	  } else {
-	    hotAPI.reload("data-v-4ad6f7e2", __vue_options__)
-	  }
-	})()}
-	if (__vue_options__.functional) {console.error("[vue-loader] EntranceGuardState.vue: functional components are not supported and should be defined in plain js files using render functions.")}
-
-	module.exports = __vue_exports__
-
-
-/***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(62);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4ad6f7e2!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EntranceGuardState.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4ad6f7e2!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EntranceGuardState.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n@charset \"UTF-8\";\n.body-entrance-guard input, .body-entrance-guard select {\n  display: inline-block;\n  width: 200px;\n}\n.body-entrance-guard:after {\n  content: '\\95E8\\7981\\72B6\\6001';\n}\n.body-entrance-guard .search {\n  margin-top: -2px;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 63 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-
-	exports.default = {
-	    name: 'EntranceGuard',
-	    data: function data() {
-	        return {
-	            floors: [],
-	            selected: undefined,
-	            roomNumber: '',
-	            rooms: []
-	        };
-	    }
-	};
-
-/***/ },
-/* 64 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('div', {
-	    staticClass: "body body-entrance-guard"
-	  }, [_h('form', {
-	    attrs: {
-	      "role": "form"
-	    }
-	  }, [_h('label', ["楼层: "]), " ", _h('select', {
-	    directives: [{
-	      name: "model",
-	      rawName: "v-model",
-	      value: (_vm.selected),
-	      expression: "selected"
-	    }],
-	    staticClass: "form-control",
-	    on: {
-	      "change": function($event) {
-	        _vm.selected = Array.prototype.filter.call($event.target.options, function(o) {
-	          return o.selected
-	        }).map(function(o) {
-	          var val = "_value" in o ? o._value : o.value;
-	          return val
-	        })[0]
-	      }
-	    }
-	  }, [_vm._l((_vm.floors), function(floor) {
-	    return _h('option', {
-	      domProps: {
-	        "value": floor.value
-	      }
-	    }, ["\n                " + _vm._s(floor.name) + "\n            "])
-	  })]), " ", _h('label', {
-	    staticStyle: {
-	      "margin-left": "20px"
-	    }
-	  }, ["房号: "]), " ", _h('input', {
-	    directives: [{
-	      name: "model",
-	      rawName: "v-model",
-	      value: (_vm.roomNumber),
-	      expression: "roomNumber"
-	    }],
-	    staticClass: "form-control",
-	    attrs: {
-	      "type": "text",
-	      "placeholder": "房间编号"
-	    },
-	    domProps: {
-	      "value": _vm._s(_vm.roomNumber)
-	    },
-	    on: {
-	      "input": function($event) {
-	        if ($event.target.composing) { return; }
-	        _vm.roomNumber = $event.target.value
-	      }
-	    }
-	  }), " ", _h('button', {
-	    staticClass: "btn btn-default search",
-	    on: {
-	      "click": function($event) {
-	        $event.preventDefault();
-	        _vm.search($event)
-	      }
-	    }
-	  }, ["查询"])]), " ", " ", _h('table', {
-	    staticClass: "table table-striped"
-	  }, [_vm._m(0), " ", _h('tbody', [_vm._m(1), " ", _vm._m(2), " ", _vm._m(3), " ", _vm._l((_vm.rooms), function(room) {
-	    return _h('tr', [_h('td', [_vm._s(room.floor)]), " ", _h('td', [_vm._s(room.ID)]), " ", _h('td', [_vm._s(room.state)])])
-	  })])])])
-	},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('thead', [_h('tr', [_h('td', ["楼层"]), " ", _h('td', ["房号"]), " ", _h('td', ["状态"])])])
-	},function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('tr', [_h('td', ["3"]), " ", _h('td', ["518"]), " ", _h('td', ["装修中"])])
-	},function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('tr', [_h('td', ["3"]), " ", _h('td', ["518"]), " ", _h('td', ["装修中"])])
-	},function (){var _vm=this;var _h=_vm.$createElement;
-	  return _h('tr', [_h('td', ["3"]), " ", _h('td', ["518"]), " ", _h('td', ["装修中"])])
-	}]}
-	module.exports.render._withStripped = true
-	if (false) {
-	  module.hot.accept()
-	  if (module.hot.data) {
-	     require("vue-hot-reload-api").rerender("data-v-4ad6f7e2", module.exports)
-	  }
-	}
-
-/***/ },
-/* 65 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_exports__, __vue_options__
-	var __vue_styles__ = {}
-
-	/* styles */
-	__webpack_require__(66)
-
-	/* script */
-	__vue_exports__ = __webpack_require__(68)
-
-	/* template */
-	var __vue_template__ = __webpack_require__(71)
-	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
-	if (
-	  typeof __vue_exports__.default === "object" ||
-	  typeof __vue_exports__.default === "function"
-	) {
-	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
-	__vue_options__ = __vue_exports__ = __vue_exports__.default
-	}
-	if (typeof __vue_options__ === "function") {
-	  __vue_options__ = __vue_options__.options
-	}
-	__vue_options__.__file = "D:\\web\\graduation-design\\client\\src\\components\\bodies\\Password.vue"
-	__vue_options__.render = __vue_template__.render
-	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-
-	/* hot reload */
-	if (false) {(function () {
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  module.hot.accept()
-	  if (!module.hot.data) {
-	    hotAPI.createRecord("data-v-13e937bb", __vue_options__)
-	  } else {
-	    hotAPI.reload("data-v-13e937bb", __vue_options__)
-	  }
-	})()}
-	if (__vue_options__.functional) {console.error("[vue-loader] Password.vue: functional components are not supported and should be defined in plain js files using render functions.")}
-
-	module.exports = __vue_exports__
-
-
-/***/ },
-/* 66 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(67);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-13e937bb!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Password.vue", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-13e937bb!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Password.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 67 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n@charset \"UTF-8\";\n.body-password form {\n  margin-top: 10px;\n  padding-top: 20px;\n  border-top: 3px solid #999;\n}\n.body-password form label {\n    width: 80px;\n}\n.body-password form input {\n    display: inline-block;\n    width: 200px;\n}\n.body-password form .middle {\n    position: relative;\n    width: 280px;\n    text-align: center;\n}\n.body-password form .middle button {\n      margin-right: -3px;\n      float: right;\n}\n.body-password:after {\n  content: '\\4FEE\\6539\\5BC6\\7801';\n}\n.body-password .input-danger {\n  border-color: #e96666;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(233, 120, 120, 0.6);\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(233, 120, 120, 0.6);\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	__webpack_require__(69);
-
-	var _common = __webpack_require__(70);
-
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-
-	exports.default = {
-	    name: 'Password',
-	    data: function data() {
-	        return {
-	            oldPassword: '',
-	            newPassword: '',
-	            repeatPassword: ''
-	        };
-	    },
-
-
-	    methods: {
-	        isConsistent: function isConsistent() {
-	            if (this.newPassword !== this.repeatPassword) this.$refs.repeat.className = 'form-control input-danger';else this.$refs.repeat.className = 'form-control';
-	        },
-	        onClick: function onClick() {
-	            if (this.newPassword !== this.repeatPassword) {
-	                alert('两次密码输入不一致');
-	            } else {
-	                var data = {
-	                    oldPassword: this.oldPassword,
-	                    newPassword: this.newPassword
-	                };
-
-	                console.log((0, _common.toFormData)(data));
-
-	                fetch('/password', {
-	                    method: 'PUT',
-	                    headers: { 'Content-Type': 'application/json' },
-	                    body: JSON.stringify(data)
-	                }).then(function (response) {
-	                    return response.json();
-	                }).then(function (_ref) {
-	                    var msg = _ref.msg;
-
-	                    alert(msg);
-	                });
-	            }
+	            if (!this.areaSelected || !this.nodeSelected) alert('请选择区域和节点');else fetch('/records?area=' + this.areaSelected + '&node=' + this.nodeSelected).then(function (response) {
+	                return response.json();
+	            }).then(function (_ref) {
+	                var data = _ref.data;
+	                return _this.records = data;
+	            });
 	        }
 	    },
 
 	    watch: {
-	        newPassword: function newPassword() {
-	            this.isConsistent();
-	        },
-	        repeatPassword: function repeatPassword() {
-	            this.isConsistent();
+	        areaSelected: function areaSelected(newVal) {
+	            var _this2 = this;
+
+	            fetch('/nodes?area=' + this.areaSelected).then(function (response) {
+	                return response.json();
+	            }).then(function (_ref2) {
+	                var data = _ref2.data;
+	                return _this2.nodes = data;
+	            });
 	        }
+	    },
+
+	    mounted: function mounted() {
+	        var _this3 = this;
+
+	        fetch('/areas').then(function (response) {
+	            return response.json();
+	        }).then(function (_ref3) {
+	            var data = _ref3.data;
+	            return _this3.areas = data;
+	        });
 	    }
-	};
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 
 /***/ },
-/* 69 */
+/* 59 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -12493,7 +12076,183 @@
 
 
 /***/ },
-/* 70 */
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('div', {
+	    staticClass: "body body-access"
+	  }, [_h('form', {
+	    attrs: {
+	      "role": "form"
+	    }
+	  }, [_h('label', ["区域："]), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (_vm.areaSelected),
+	      expression: "areaSelected"
+	    }],
+	    staticClass: "form-control",
+	    on: {
+	      "change": function($event) {
+	        _vm.areaSelected = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          var val = "_value" in o ? o._value : o.value;
+	          return val
+	        })[0]
+	      }
+	    }
+	  }, [_vm._l((_vm.areas), function(area) {
+	    return _h('option', {
+	      domProps: {
+	        "value": area.no
+	      }
+	    }, ["\n                " + _vm._s(area.name) + "\n            "])
+	  })]), " ", _h('label', {
+	    staticStyle: {
+	      "margin-left": "20px"
+	    }
+	  }, ["节点ID: "]), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (_vm.nodeSelected),
+	      expression: "nodeSelected"
+	    }],
+	    staticClass: "form-control",
+	    on: {
+	      "change": function($event) {
+	        _vm.nodeSelected = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          var val = "_value" in o ? o._value : o.value;
+	          return val
+	        })[0]
+	      }
+	    }
+	  }, [_vm._l((_vm.nodes), function(node) {
+	    return _h('option', {
+	      domProps: {
+	        "value": node.nodeId
+	      }
+	    }, ["\n                " + _vm._s(node.nodeName) + "\n            "])
+	  })]), " ", _h('button', {
+	    staticClass: "btn btn-default search",
+	    on: {
+	      "click": function($event) {
+	        $event.preventDefault();
+	        _vm.onSearch($event)
+	      }
+	    }
+	  }, ["查询"])]), " ", " ", _h('table', {
+	    staticClass: "table table-striped"
+	  }, [_vm._m(0), " ", _h('tbody', [_vm._m(1), " ", _vm._l((_vm.records), function(record) {
+	    return _h('tr', [_h('td', ["record.cardNo"]), " ", _h('td', ["record.permissionId"]), " ", _h('td', ["record.nodeId"]), " ", _h('td', ["record.time"])])
+	  })])])])
+	},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('thead', [_h('tr', [_h('td', ["卡号"]), " ", _h('td', ["权限ID"]), " ", _h('td', ["节点"]), " ", _h('td', ["时间"])])])
+	},function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('tr', [_h('td', ["871928741"]), " ", _h('td', ["312312"]), " ", _h('td', ["芙蓉1#518"]), " ", _h('td', ["2012-02-02"])])
+	}]}
+	module.exports.render._withStripped = true
+	if (false) {
+	  module.hot.accept()
+	  if (module.hot.data) {
+	     require("vue-hot-reload-api").rerender("data-v-4e9e8071", module.exports)
+	  }
+	}
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_exports__, __vue_options__
+	var __vue_styles__ = {}
+
+	/* styles */
+	__webpack_require__(62)
+
+	/* script */
+	__vue_exports__ = __webpack_require__(64)
+
+	/* template */
+	var __vue_template__ = __webpack_require__(65)
+	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+	if (
+	  typeof __vue_exports__.default === "object" ||
+	  typeof __vue_exports__.default === "function"
+	) {
+	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+	__vue_options__ = __vue_exports__ = __vue_exports__.default
+	}
+	if (typeof __vue_options__ === "function") {
+	  __vue_options__ = __vue_options__.options
+	}
+	__vue_options__.__file = "D:\\web\\graduation-design\\client\\src\\components\\bodies\\EntranceGuardState.vue"
+	__vue_options__.render = __vue_template__.render
+	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+	/* hot reload */
+	if (false) {(function () {
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  module.hot.accept()
+	  if (!module.hot.data) {
+	    hotAPI.createRecord("data-v-4ad6f7e2", __vue_options__)
+	  } else {
+	    hotAPI.reload("data-v-4ad6f7e2", __vue_options__)
+	  }
+	})()}
+	if (__vue_options__.functional) {console.error("[vue-loader] EntranceGuardState.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+	module.exports = __vue_exports__
+
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(63);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4ad6f7e2!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EntranceGuardState.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-4ad6f7e2!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./EntranceGuardState.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n@charset \"UTF-8\";\n.body-entrance-guard input, .body-entrance-guard select {\n  display: inline-block;\n  width: 200px;\n}\n.body-entrance-guard:after {\n  content: '\\95E8\\7981\\72B6\\6001';\n}\n.body-entrance-guard .search {\n  margin-top: -2px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 64 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -12501,46 +12260,341 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	function toFormData(obj) {
-	    if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') throw new TypeError('Param must be a object.');
-
-	    var result = [];
-
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-
-	    try {
-	        for (var _iterator = Object.keys(obj)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	            var key = _step.value;
-
-	            result.push(key + '=' + obj[key]);
-	        }
-	    } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	    } finally {
-	        try {
-	            if (!_iteratorNormalCompletion && _iterator.return) {
-	                _iterator.return();
-	            }
-	        } finally {
-	            if (_didIteratorError) {
-	                throw _iteratorError;
-	            }
-	        }
+	exports.default = {
+	    name: 'EntranceGuard',
+	    data: function data() {
+	        return {
+	            floors: [],
+	            selected: undefined,
+	            roomNumber: '',
+	            rooms: []
+	        };
 	    }
-
-	    return result.join('&');
-	}
-
-	exports.toFormData = toFormData;
+	};
 
 /***/ },
-/* 71 */
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('div', {
+	    staticClass: "body body-entrance-guard"
+	  }, [_h('form', {
+	    attrs: {
+	      "role": "form"
+	    }
+	  }, [_h('label', ["楼层: "]), " ", _h('select', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (_vm.selected),
+	      expression: "selected"
+	    }],
+	    staticClass: "form-control",
+	    on: {
+	      "change": function($event) {
+	        _vm.selected = Array.prototype.filter.call($event.target.options, function(o) {
+	          return o.selected
+	        }).map(function(o) {
+	          var val = "_value" in o ? o._value : o.value;
+	          return val
+	        })[0]
+	      }
+	    }
+	  }, [_vm._l((_vm.floors), function(floor) {
+	    return _h('option', {
+	      domProps: {
+	        "value": floor.value
+	      }
+	    }, ["\n                " + _vm._s(floor.name) + "\n            "])
+	  })]), " ", _h('label', {
+	    staticStyle: {
+	      "margin-left": "20px"
+	    }
+	  }, ["房号: "]), " ", _h('input', {
+	    directives: [{
+	      name: "model",
+	      rawName: "v-model",
+	      value: (_vm.roomNumber),
+	      expression: "roomNumber"
+	    }],
+	    staticClass: "form-control",
+	    attrs: {
+	      "type": "text",
+	      "placeholder": "房间编号"
+	    },
+	    domProps: {
+	      "value": _vm._s(_vm.roomNumber)
+	    },
+	    on: {
+	      "input": function($event) {
+	        if ($event.target.composing) { return; }
+	        _vm.roomNumber = $event.target.value
+	      }
+	    }
+	  }), " ", _h('button', {
+	    staticClass: "btn btn-default search",
+	    on: {
+	      "click": function($event) {
+	        $event.preventDefault();
+	        _vm.search($event)
+	      }
+	    }
+	  }, ["查询"])]), " ", " ", _h('table', {
+	    staticClass: "table table-striped"
+	  }, [_vm._m(0), " ", _h('tbody', [_vm._m(1), " ", _vm._m(2), " ", _vm._m(3), " ", _vm._l((_vm.rooms), function(room) {
+	    return _h('tr', [_h('td', [_vm._s(room.floor)]), " ", _h('td', [_vm._s(room.ID)]), " ", _h('td', [_vm._s(room.state)])])
+	  })])])])
+	},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('thead', [_h('tr', [_h('td', ["楼层"]), " ", _h('td', ["房号"]), " ", _h('td', ["状态"])])])
+	},function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('tr', [_h('td', ["3"]), " ", _h('td', ["518"]), " ", _h('td', ["装修中"])])
+	},function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('tr', [_h('td', ["3"]), " ", _h('td', ["518"]), " ", _h('td', ["装修中"])])
+	},function (){var _vm=this;var _h=_vm.$createElement;
+	  return _h('tr', [_h('td', ["3"]), " ", _h('td', ["518"]), " ", _h('td', ["装修中"])])
+	}]}
+	module.exports.render._withStripped = true
+	if (false) {
+	  module.hot.accept()
+	  if (module.hot.data) {
+	     require("vue-hot-reload-api").rerender("data-v-4ad6f7e2", module.exports)
+	  }
+	}
+
+/***/ },
+/* 66 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_exports__, __vue_options__
+	var __vue_styles__ = {}
+
+	/* styles */
+	__webpack_require__(67)
+
+	/* script */
+	__vue_exports__ = __webpack_require__(69)
+
+	/* template */
+	var __vue_template__ = __webpack_require__(70)
+	__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+	if (
+	  typeof __vue_exports__.default === "object" ||
+	  typeof __vue_exports__.default === "function"
+	) {
+	if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+	__vue_options__ = __vue_exports__ = __vue_exports__.default
+	}
+	if (typeof __vue_options__ === "function") {
+	  __vue_options__ = __vue_options__.options
+	}
+	__vue_options__.__file = "D:\\web\\graduation-design\\client\\src\\components\\bodies\\Password.vue"
+	__vue_options__.render = __vue_template__.render
+	__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+
+	/* hot reload */
+	if (false) {(function () {
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  module.hot.accept()
+	  if (!module.hot.data) {
+	    hotAPI.createRecord("data-v-13e937bb", __vue_options__)
+	  } else {
+	    hotAPI.reload("data-v-13e937bb", __vue_options__)
+	  }
+	})()}
+	if (__vue_options__.functional) {console.error("[vue-loader] Password.vue: functional components are not supported and should be defined in plain js files using render functions.")}
+
+	module.exports = __vue_exports__
+
+
+/***/ },
+/* 67 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(68);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-13e937bb!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Password.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/vue-loader/lib/style-rewriter.js?id=data-v-13e937bb!./../../../../node_modules/sass-loader/index.js!./../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Password.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n@charset \"UTF-8\";\n.body-password form {\n  margin-top: 10px;\n  padding-top: 20px;\n  border-top: 3px solid #999;\n}\n.body-password form label {\n    width: 80px;\n}\n.body-password form input {\n    display: inline-block;\n    width: 200px;\n}\n.body-password form .middle {\n    position: relative;\n    width: 280px;\n    text-align: center;\n}\n.body-password form .middle button {\n      margin-right: -3px;\n      float: right;\n}\n.body-password:after {\n  content: '\\4FEE\\6539\\5BC6\\7801';\n}\n.body-password .input-danger {\n  border-color: #e96666;\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(233, 120, 120, 0.6);\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(233, 120, 120, 0.6);\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	__webpack_require__(59);
+
+	exports.default = {
+	    name: 'Password',
+	    data: function data() {
+	        return {
+	            oldPassword: '',
+	            newPassword: '',
+	            repeatPassword: ''
+	        };
+	    },
+
+
+	    methods: {
+	        isConsistent: function isConsistent() {
+	            if (this.newPassword !== this.repeatPassword) this.$refs.repeat.className = 'form-control input-danger';else this.$refs.repeat.className = 'form-control';
+	        },
+	        onClick: function onClick() {
+	            if (this.newPassword !== this.repeatPassword) {
+	                alert('两次密码输入不一致');
+	            } else {
+	                var data = {
+	                    oldPassword: this.oldPassword,
+	                    newPassword: this.newPassword
+	                };
+
+	                fetch('/password', {
+	                    method: 'PUT',
+	                    headers: { 'Content-Type': 'application/json' },
+	                    body: JSON.stringify(data)
+	                }).then(function (response) {
+	                    return response.json();
+	                }).then(function (_ref) {
+	                    var msg = _ref.msg;
+
+	                    alert(msg);
+	                });
+	            }
+	        }
+	    },
+
+	    watch: {
+	        newPassword: function newPassword() {
+	            this.isConsistent();
+	        },
+	        repeatPassword: function repeatPassword() {
+	            this.isConsistent();
+	        }
+	    }
+	}; //
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+/***/ },
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
@@ -12643,7 +12697,7 @@
 	}
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
@@ -12664,7 +12718,7 @@
 	}
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;

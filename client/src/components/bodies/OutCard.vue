@@ -30,7 +30,7 @@
                 <label>性别</label>
                 <input type="text" class="form-control" placeholder="性别">
             </div>
-            
+
             <button class="btn btn-default" @click.prevent='submit'>提交</button>
         </form>
     </div>

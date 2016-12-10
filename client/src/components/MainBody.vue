@@ -9,9 +9,9 @@
 <script>
 import OutCard from './bodies/OutCard'
 import Users from './bodies/Users'
-import Property from './bodies/Property'
+import Permission from './bodies/Permission'
 import Node from './bodies/Node'
-import Access from './bodies/Access'
+import Record from './bodies/Record'
 import EntranceGuardState from './bodies/EntranceGuardState'
 import Password from './bodies/Password'
 
@@ -25,9 +25,9 @@ export default {
     components: {
         OutCard,
         Users,
-        Property,
+        Permission,
         Node,
-        Access,
+        Record,
         EntranceGuardState,
         Password
     },
