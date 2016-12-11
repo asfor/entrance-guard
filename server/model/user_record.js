@@ -1,4 +1,5 @@
 var UserRecord = require('./db/user_record')
+var {cache, resetArea, handle} = require('./common')
 
 exports.get = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
@@ -9,6 +10,17 @@ exports.get = (req, res) => {
         else
             res.send(JSON.stringify({data: docs}))
     })
+}
+
+exports.handle = (req, res, next) => {
+    const area = req.params.area
+    const data = req.body.userRecord
+
+    data.forEach((doc, index) => data[index].area = area)
+
+    model.create(data)
+
+    next()
 }
 
 exports.addTestData = newData => (req, res, next) => {

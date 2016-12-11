@@ -5,13 +5,27 @@ var NodeInfo = require('../model/node_info')
 var UserInfo = require('../model/user_info')
 var UserPermission = require('../model/user_permission')
 var UserRecord = require('../model/user_record')
+var {extractCache} = require('../model/common')
 
 var router = express.Router()
 
-// 前三个不要改顺序，不然会无限重定向
+// PC端接口
+router.get('/extractCache/:area', extractCache)
+router.post('/commit/:area',
+    Area.handle,
+    NodeInfo.handle,
+    UserInfo.handle,
+    UserPermission.handle,
+    UserRecord.handle,
+    (req, res) => res.end('It\'s OK!')
+)
+
+// 登陆相关，这三个不要改顺序，不然会无限重定向
 router.use('/login', Supervisor.loginPage)
 router.post('/entry', Supervisor.login)
 // router.use(Supervisor.check)
+
+// 主体页面和退出
 router.get('/', (req, res) => res.render('index'))
 router.get('/exit', Supervisor.exit)
 

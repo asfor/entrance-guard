@@ -164,7 +164,7 @@ export default {
 
         onSave() {
             const data = {
-                area: this.areaSelected
+                area: this.areaSelected,
                 cardNo: this.modalCardNo,
                 personId: this.modalPersonId.toLowerCase(),
                 name: this.modalName,

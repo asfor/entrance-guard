@@ -10560,8 +10560,9 @@
 	        },
 	        onSave: function onSave() {
 	            var data = {
+	                area: this.areaSelected,
 	                cardNo: this.modalCardNo,
-	                personId: this.modalPersonId,
+	                personId: this.modalPersonId.toLowerCase(),
 	                name: this.modalName,
 	                phone: this.modalPhone
 	            };
@@ -11574,7 +11575,7 @@
 	            var data = {
 	                area: this.areaSelected,
 	                cardNo: this.modalCardNo,
-	                personId: this.modalPersonId,
+	                personId: this.modalPersonId.toLowerCase(),
 	                name: this.modalName,
 	                nodeId: this.modalNodeId,
 	                type: this.modalType,
@@ -12415,14 +12416,20 @@
 	        onSearch: function onSearch() {
 	            var _this = this;
 
-	            if (!areaSelected) alert('请选择区域!');else fetch('/nodes?area=' + this.areaSelected + '&nodeName=' + this.nodeName).then(function (response) {
-	                return response.json();
-	            }).then(function (_ref3) {
-	                var data = _ref3.data;
-	                return _this.nodes = data;
-	            }).catch(function () {
-	                return alert('请求失败');
-	            });
+	            if (!areaSelected) alert('请选择区域!');else {
+	                var url = '/nodes?area=' + this.areaSelected;
+
+	                if (this.nodeName !== '') url += '&nodeName=' + this.nodeName;
+
+	                fetch(url).then(function (response) {
+	                    return response.json();
+	                }).then(function (_ref3) {
+	                    var data = _ref3.data;
+	                    return _this.nodes = data;
+	                }).catch(function () {
+	                    return alert('请求失败');
+	                });
+	            }
 	        }
 	    },
 
@@ -12757,14 +12764,20 @@
 	        onSearch: function onSearch() {
 	            var _this = this;
 
-	            if (!this.areaSelected || !this.cardSelected || !this.nodeSelected) alert('请选择区域、卡号和节点');else fetch('/records?area=' + this.areaSelected + '&cardNo=' + this.cardSelected + '&nodeId=' + this.nodeSelected).then(function (response) {
-	                return response.json();
-	            }).then(function (_ref) {
-	                var data = _ref.data;
-	                return _this.records = data;
-	            }).catch(function () {
-	                return alert('请求失败');
-	            });
+	            if (!this.areaSelected || !this.cardSelected || !this.nodeSelected) alert('请选择区域、卡号和节点');else {
+	                var url = '/records?area=' + this.areaSelected;
+	                if (this.cardSelected !== '') url += '&cardNo=' + this.cardSelected;
+	                if (this.nodeSelected !== '') url += '&nodeId=' + this.nodeSelected;
+
+	                fetch(url).then(function (response) {
+	                    return response.json();
+	                }).then(function (_ref) {
+	                    var data = _ref.data;
+	                    return _this.records = data;
+	                }).catch(function () {
+	                    return alert('请求失败');
+	                });
+	            }
 	        }
 	    },
 

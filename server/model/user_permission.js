@@ -1,4 +1,5 @@
 var UserPermission = require('./db/user_permission')
+var {cache, resetArea, handle} = require('./common')
 
 exports.get = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
@@ -12,26 +13,36 @@ exports.get = (req, res) => {
 }
 
 exports.add = (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
+    const body = JSON.parse(JSON.stringify(req.body))
+    const {area} = body
 
-    UserPermission.create(req.body, (err, docs) => {
-        if(err)
-            res.status(500).send({msg: '添加失败，请重试\n' + err})
-        else
-            res.send(JSON.stringify({msg: '添加成功'}))
-    })
+    delete body.area
+
+    let areaCache = cache[area]
+
+    if(!areaCache)
+        areaCache = cache[area] = resetArea(area)
+
+    areaCache.UserPermission.add.push(body)
+
+    res.setHeader('Content-Type', 'application/json')
+    res.send({msg: '权限新增请求已提交'})
 }
 
 exports.del = (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
+    const {area, id} = req.query
+    let areaCache = cache[area]
 
-    UserPermission.remove({cardNo: req.query.cardNo}, err => {
-        if(err)
-            res.status(500).send({msg: '删除失败，请重试\n' + err})
-        else
-            res.send(JSON.stringify({msg: '删除成功'}))
-    })
+    if(!areaCache)
+    areaCache = cache[area] = resetArea(area)
+
+    areaCache.UserInfo.del.push(id)
+
+    res.setHeader('Content-Type', 'application/json')
+    res.send({msg: '删除请求已提交'})
 }
+
+exports.handle = handle('userPermission', UserPermission, 'id')
 
 exports.addTestData = newData => (req, res, next) => {
     if(!newData) next()
