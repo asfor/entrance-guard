@@ -173,7 +173,7 @@ export default {
             const data = {
                 area: this.areaSelected,
                 cardNo: this.modalCardNo,
-                personId: this.modalPersonId,
+                personId: this.modalPersonId.toLowerCase(),
                 name: this.modalName,
                 nodeId: this.modalNodeId,
                 type: this.modalType,

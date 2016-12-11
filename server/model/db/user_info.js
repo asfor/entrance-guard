@@ -31,16 +31,6 @@ var schemas = new Schema({
         trim: true
     },
 
-    major: {
-        type: String,
-        trim: true
-    },
-
-    sex: {
-        type: String,
-        trim: true
-    },
-
     time: {
         type: Date,
         default: Date.now

@@ -154,11 +154,16 @@ export default {
         onSearch() {
             if(!areaSelected)
                 alert('请选择区域!')
-            else
-                fetch(`/nodes?area=${this.areaSelected}&nodeName=${this.nodeName}`)
+            else {
+                let url = `/nodes?area=${this.areaSelected}`
+
+                if(this.nodeName !== '')   url += `&nodeName=${this.nodeName}`
+
+                fetch(url)
                     .then(response => response.json())
                     .then(({data}) => this.nodes = data)
                     .catch(() => alert('请求失败'))
+            }
         }
     },
 

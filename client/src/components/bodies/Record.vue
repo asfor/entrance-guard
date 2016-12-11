@@ -86,11 +86,16 @@ export default {
         onSearch() {
             if(!this.areaSelected || !this.cardSelected || !this.nodeSelected)
                 alert('请选择区域、卡号和节点')
-            else
-                fetch(`/records?area=${this.areaSelected}&card=${this.cardSelected}&node=${this.nodeSelected}`)
+            else {
+                let url = `/records?area=${this.areaSelected}`
+                if(this.cardSelected !== '')    url += `&cardNo=${this.cardSelected}`
+                if(this.nodeSelected !== '')    url += `&nodeId=${this.nodeSelected}`
+
+                fetch(url)
                     .then(response => response.json())
                     .then(({data}) => this.records = data)
                     .catch(() => alert('请求失败'))
+            }
         }
     },
 

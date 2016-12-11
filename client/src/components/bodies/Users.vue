@@ -2,20 +2,20 @@
     <div class="body body-user">
         <!-- 表单 -->
         <form role='form'>
-            <label>专业: </label>
-            <select class="form-control" v-model='selected'>
+            <label>区域：</label>
+            <select class="form-control" v-model='areaSelected'>
                 <option
-                    v-for='specialty in specialties'
-                    :value='specialty.value'
+                    v-for='area in areas'
+                    :value='area.no'
                 >
-                    {{specialty.name}}
+                    {{area.name}}
                 </option>
             </select>
 
-            <label style="margin-left: 20px;">姓名: </label>
+            <label style="margin-left: 20px;">姓名：</label>
             <input type="text" class="form-control" placeholder='姓名' v-model='name'>
 
-            <button class="btn btn-default search" @click.prevent='search'>查询</button>
+            <button class="btn btn-default search" @click.prevent='onSearch'>查询</button>
         </form>
 
 
@@ -63,14 +63,14 @@
                     </td>
                 </tr>
 
-                <tr v-for='user in users'>
-                    <td>{{user.cardID}}</td>
-                    <td>{{user.studentID}}</td>
+                <tr v-for='(user, index) in users'>
+                    <td>{{user.cardNo}}</td>
+                    <td>{{user.personId}}</td>
                     <td>{{user.name}}</td>
                     <td>{{user.phone}}</td>
                     <td>
-                        <button class="btn btn-primary" @click='edit(user.cardID)'>编辑</button>
-                        <button class="btn btn-danger" @click='delete(user.cardID)'>删除</button>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='onEdit(index)'>编辑</button>
+                        <button class="btn btn-danger" @click='onDelete(user.cardNo)'>删除</button>
                     </td>
                 </tr>
             </tbody>
@@ -83,14 +83,35 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Modal title</h4>
+                        <h4 class="modal-title">编辑用户信息</h4>
                     </div>
                     <div class="modal-body">
-                        <p>One fine body&hellip;</p>
+                        <form class="modal-form">
+                            <div class="form-group">
+                                <label>卡号：</label>
+                                <input type="text" class='form-control' readonly='readonly' :value='modalCardNo'>
+                            </div>
+
+                            <div class="form-group">
+                                <label>学号：</label>
+                                <input type="text" class="form-control" v-model='modalPersonId'>
+                            </div>
+
+                            <div class="form-group">
+                                <label>姓名：</label>
+                                <input type="text" class="form-control" v-model='modalName'>
+                            </div>
+
+                            <div class="form-group">
+                                <label>电话：</label>
+                                <input type="text" class="form-control" v-model='modalPhone'>
+                            </div>
+
+                        </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" @click='onSave'>确定</button>
                     </div>
                 </div>
             </div>
@@ -100,26 +121,80 @@
 </template>
 
 <script>
-// import 'whatwg-fetch'
+import 'whatwg-fetch'
 
 export default {
     name: 'users',
     data() {
         return {
-            specialties: [],
-            selected: undefined,
+            // 全局属性
+            areaSelected: undefined,
+            areas: [],
             name: '',
-            users: []
+            users: [],
+
+            // 模拟框属性
+            modalCardNo: undefined,
+            modalPersonId: undefined,
+            modalName: undefined,
+            modalPhone: undefined
         }
     },
 
     methods: {
-        search() {},
-        edit(cardID) {},
-        delete(cardID) {}
+        onSearch() {
+            if(!areaSelected)
+                alert('请选择区域!')
+            else {
+                fetch(`/users?area=${this.areaSelected}&name=${this.name}`)
+                    .then(response => response.json())
+                    .then(({data}) => this.users = data)
+                    .catch(() => alert('请求失败'))
+            }
+        },
+
+        onEdit(index) {
+            const user = this.users[index]
+
+            this.modalCardNo = user.cardNo
+            this.modalPersonId = user.personId
+            this.modalName = user.name
+            this.modalPhone = user.phone
+        },
+
+        onSave() {
+            const data = {
+                area: this.areaSelected
+                cardNo: this.modalCardNo,
+                personId: this.modalPersonId.toLowerCase(),
+                name: this.modalName,
+                phone: this.modalPhone
+            }
+
+            fetch('/users', {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+              .then(({msg}) => alert(msg))
+              .catch(() => alert('请求失败'))
+        },
+
+        onDelete(cardNo) {
+            if(confirm('确定要删除用户?'))
+                fetch(`/users?cardNo=${cardNo}`, {method: 'DELETE'})
+                    .then(response => response.json())
+                    .then(({msg}) => alert(msg))
+                    .catch(() => alert('请求失败'))
+        }
     },
 
-    created() {}
+    mounted() {
+        fetch('/areas')
+            .then(response => response.json())
+            .then(({data}) => this.areas = data)
+            .catch(() => alert('请求失败'))
+    }
 }
 </script>
 
@@ -128,6 +203,13 @@ export default {
     input, select {
         display: inline-block;
         width: 200px;
+    }
+
+    .modal-form {
+        text-align: center;
+
+        label {width: 80px;}
+        input, select {width: 200px;}
     }
     
     &:after {content: '用户信息管理';}

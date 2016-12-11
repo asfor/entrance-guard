@@ -10,3 +10,12 @@ exports.get = (req, res) => {
             res.send(JSON.stringify({data: docs}))
     })
 }
+
+exports.addTestData = newData => (req, res, next) => {
+    if(!newData) next()
+
+    Area.create(newData, err => {
+        if(err) console.log('Area: \n' + err)
+        next()
+    })
+}
