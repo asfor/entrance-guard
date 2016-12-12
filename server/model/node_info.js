@@ -54,7 +54,7 @@ exports.set = (req, res) => {
     let areaCache = cache[area]
 
     if(!areaCache)
-        areaCache = cache[area] = resetArea(area)
+        areaCache = cache[area] = resetArea(area, cache)
 
     areaCache.nodeInfo.set.push({
         nodeId: nodeId,

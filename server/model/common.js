@@ -19,8 +19,8 @@ const init = {
 }
 
 // 重置区域缓存
-function resetArea(area) {
-    cache[area] = JSON.parse(JSON.stringify(init))
+function resetArea(area, _cache) {
+    return cache[area] = JSON.parse(JSON.stringify(init))
 }
 
 // 提取并重置缓存
@@ -37,25 +37,33 @@ function extractCache(req, res) {
     res.send(result)
 }
 
+// 数据处理的高阶函数
 function handle(cacheKey, model, uniqueKey) {
     return (req, res, next) => {
         const area = req.params.area
         const data = req.body[cacheKey]
 
-        data.add.forEach((doc, index) => data.add[index].area = area)
+        if(data.add) {
+            data.add.forEach((doc, index) => data.add[index].area = area)
+            model.create(data.add)
+        }
 
-        model.create(data.add)
-
-        data.set.forEach(doc => {
-            model.update({
-                area: area,
-                [uniqueKey]: doc[uniqueKey]
-            }, {$set: doc.content})
-        })
+        if(data.set) {
+            data.set.forEach(doc => {
+                model.update({
+                    area: area,
+                    [uniqueKey]: doc[uniqueKey]
+                }, {$set: doc.content}, err => {
+                    if(err) console.error(area + ': ' + err)
+                })
+            })
+        }
 
         model.remove({
             area: area,
             [uniqueKey]: {$in: data.del}
+        }, err => {
+            if(err) console.error(area + ': ' + err)
         })
 
         next()

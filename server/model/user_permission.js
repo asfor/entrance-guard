@@ -23,7 +23,7 @@ exports.add = (req, res) => {
     if(!areaCache)
         areaCache = cache[area] = resetArea(area)
 
-    areaCache.UserPermission.add.push(body)
+    areaCache.userPermission.add.push(body)
 
     res.setHeader('Content-Type', 'application/json')
     res.send({msg: '权限新增请求已提交'})
@@ -36,7 +36,7 @@ exports.del = (req, res) => {
     if(!areaCache)
     areaCache = cache[area] = resetArea(area)
 
-    areaCache.UserInfo.del.push(id)
+    areaCache.userPermission.del.push(id)
 
     res.setHeader('Content-Type', 'application/json')
     res.send({msg: '删除请求已提交'})

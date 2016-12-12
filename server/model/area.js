@@ -23,7 +23,9 @@ exports.handle = (req, res, next) => {
                     return next()
 
         Area.create({no: area}, err => {
-            console.error('Area Create: \n' + err)
+            if(err)
+                console.error('Area Create: \n' + err)
+            
             next()
         })
     })

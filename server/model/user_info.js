@@ -52,7 +52,7 @@ exports.set = (req, res) => {
         areaCache = cache[area] = resetArea(area)
 
     areaCache.userInfo.set.push({
-        nodeId: body.cardNo,
+        cardNo: cardNo,
         content: body
     })
 

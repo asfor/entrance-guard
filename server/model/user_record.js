@@ -16,9 +16,10 @@ exports.handle = (req, res, next) => {
     const area = req.params.area
     const data = req.body.userRecord
 
-    data.forEach((doc, index) => data[index].area = area)
-
-    model.create(data)
+    if(data) {
+        data.forEach((doc, index) => data[index].area = area)
+        model.create(data)
+    }
 
     next()
 }

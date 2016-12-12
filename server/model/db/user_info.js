@@ -2,37 +2,27 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
 var schemas = new Schema({
-    area: {
-        type: Number,
-        required: true
-    },
-    
-    cardNo: {
-        type: Number,
-        required: true
-    },
+    area: Number,    
+    cardNo: Number,
 
     personId: {
         type: String,
-        required: true,
         lowercase: true,
         trim: true
     },
 
     name: {
         type: String,
-        required: true,
         trim: true
     },
 
     phone: {
         type: String,
-        required: true,
         trim: true
     },
 
     time: {
-        type: Date,
+        type: String,
         default: Date.now
     }
 })
