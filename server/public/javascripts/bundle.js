@@ -10539,8 +10539,11 @@
 	        onSearch: function onSearch() {
 	            var _this = this;
 
-	            if (!areaSelected) alert('请选择区域!');else {
-	                fetch('/users?area=' + this.areaSelected + '&name=' + this.name).then(function (response) {
+	            if (!this.areaSelected) alert('请选择区域!');else {
+	                var url = '/users?area=' + this.areaSelected;
+	                if (this.name) url += '&name=' + this.name;
+
+	                fetch(url).then(function (response) {
 	                    return response.json();
 	                }).then(function (_ref) {
 	                    var data = _ref.data;
@@ -10581,7 +10584,7 @@
 	            });
 	        },
 	        onDelete: function onDelete(cardNo) {
-	            if (confirm('确定要删除用户?')) fetch('/users?cardNo=' + cardNo, { method: 'DELETE' }).then(function (response) {
+	            if (confirm('确定要删除用户?')) fetch('/users?area=' + this.areaSelected + '&cardNo=' + cardNo, { method: 'DELETE' }).then(function (response) {
 	                return response.json();
 	            }).then(function (_ref3) {
 	                var msg = _ref3.msg;
@@ -10605,9 +10608,6 @@
 	        });
 	    }
 	}; //
-	//
-	//
-	//
 	//
 	//
 	//
@@ -11221,11 +11221,7 @@
 	      }
 	    }
 	  }, [_vm._l((_vm.areas), function(area) {
-	    return _h('option', {
-	      domProps: {
-	        "value": area.no
-	      }
-	    }, ["\n                " + _vm._s(area.name) + "\n            "])
+	    return _h('option', ["\n                " + _vm._s(area.no) + "\n            "])
 	  })]), " ", _h('label', {
 	    staticStyle: {
 	      "margin-left": "20px"
@@ -11601,8 +11597,12 @@
 	        onSearch: function onSearch() {
 	            var _this = this;
 
-	            if (!this.areaSelected || !this.userSelected || !this.nodeSelected) alert('请选择区域、用户和节点');else {
-	                fetch('/permissions?area=' + this.areaSelected + '&personId=' + this.userSelected + '&nodeId=' + this.nodeSelected).then(function (response) {
+	            if (!this.areaSelected) alert('请选择区域');else {
+	                var url = '/permissions?area=' + this.areaSelected;
+	                if (this.userSelected) url += '&personId=' + this.userSelected;
+	                if (this.nodeSelected) url += '&nodeId=' + this.nodeSelected;
+
+	                fetch(url).then(function (response) {
 	                    return response.json();
 	                }).then(function (_ref2) {
 	                    var data = _ref2.data;
@@ -11628,7 +11628,7 @@
 	        areaSelected: function areaSelected(newVal) {
 	            var _this2 = this;
 
-	            fetch('/users?area=' + this.areaSelected).then(function (response) {
+	            fetch('/users?area=' + newVal).then(function (response) {
 	                return response.json();
 	            }).then(function (_ref4) {
 	                var data = _ref4.data;
@@ -11637,7 +11637,7 @@
 	                return alert('请求失败');
 	            });
 
-	            fetch('/nodes?area=' + this.areaSelected).then(function (response) {
+	            fetch('/nodes?area=' + newVal).then(function (response) {
 	                return response.json();
 	            }).then(function (_ref5) {
 	                var data = _ref5.data;
@@ -11668,7 +11668,6 @@
 	        });
 	    }
 	}; //
-	//
 	//
 	//
 	//
@@ -11838,11 +11837,7 @@
 	      }
 	    }
 	  }, [_vm._l((_vm.areas), function(area) {
-	    return _h('option', {
-	      domProps: {
-	        "value": area.no
-	      }
-	    }, ["\n                " + _vm._s(area.name) + "\n            "])
+	    return _h('option', ["\n                " + _vm._s(area.no) + "\n            "])
 	  })]), " ", _h('label', {
 	    staticStyle: {
 	      "margin-left": "20px"
@@ -11865,7 +11860,11 @@
 	        })[0]
 	      }
 	    }
-	  }, [_vm._l((_vm.users), function(user) {
+	  }, [_h('option', {
+	    attrs: {
+	      "value": ""
+	    }
+	  }), " ", _vm._l((_vm.users), function(user) {
 	    return _h('option', {
 	      domProps: {
 	        "value": user.personId
@@ -11893,7 +11892,11 @@
 	        })[0]
 	      }
 	    }
-	  }, [_vm._l((_vm.nodes), function(node) {
+	  }, [_h('option', {
+	    attrs: {
+	      "value": ""
+	    }
+	  }), " ", _vm._l((_vm.nodes), function(node) {
 	    return _h('option', {
 	      domProps: {
 	        "value": node.nodeId
@@ -12360,8 +12363,6 @@
 	//
 	//
 	//
-	//
-	//
 
 	exports.default = {
 	    name: 'node',
@@ -12382,11 +12383,11 @@
 
 	    methods: {
 	        onEdit: function onEdit(index) {
-	            this.editNodeId = nodes[index].nodeId;
-	            this.editNodeName = nodes[index].nodeName;
+	            this.editNodeId = this.nodes[index].nodeId;
+	            this.editNodeName = this.nodes[index].nodeName;
 	        },
 	        onDelete: function onDelete(index) {
-	            if (confirm('确定要删除节点？')) fetch('/nodes?area=' + this.areaSelected + '&nodeId=' + nodes[index].nodeId, { method: 'DELETE' }).then(function (response) {
+	            if (confirm('确定要删除节点？')) fetch('/nodes?area=' + this.areaSelected + '&nodeId=' + this.nodes[index].nodeId, { method: 'DELETE' }).then(function (response) {
 	                return response.json();
 	            }).then(function (_ref) {
 	                var msg = _ref.msg;
@@ -12416,10 +12417,10 @@
 	        onSearch: function onSearch() {
 	            var _this = this;
 
-	            if (!areaSelected) alert('请选择区域!');else {
+	            if (!this.areaSelected) alert('请选择区域!');else {
 	                var url = '/nodes?area=' + this.areaSelected;
 
-	                if (this.nodeName !== '') url += '&nodeName=' + this.nodeName;
+	                if (this.nodeName) url += '&nodeName=' + this.nodeName;
 
 	                fetch(url).then(function (response) {
 	                    return response.json();
@@ -12477,11 +12478,7 @@
 	      }
 	    }
 	  }, [_vm._l((_vm.areas), function(area) {
-	    return _h('option', {
-	      domProps: {
-	        "value": area.no
-	      }
-	    }, ["\n                " + _vm._s(area.name) + "\n            "])
+	    return _h('option', ["\n                " + _vm._s(area.no) + "\n            "])
 	  })]), " ", _h('label', {
 	    staticStyle: {
 	      "margin-left": "20px"
@@ -12518,7 +12515,7 @@
 	  }, ["查询"])]), " ", " ", _h('table', {
 	    staticClass: "table table-striped"
 	  }, [_vm._m(0), " ", _h('tbody', [_vm._m(1), " ", _vm._m(2), " ", _vm._m(3), " ", _vm._l((_vm.nodes), function(node, index) {
-	    return _h('tr', [_h('td', [_vm._s(node.nodeId)]), " ", _h('td', [_vm._s(node.place)]), " ", _h('td', [_vm._s(node.nodeName)]), " ", _h('td', [_vm._s(node.status)]), " ", _h('td', [_h('button', {
+	    return _h('tr', [_h('td', [_vm._s(node.nodeId)]), " ", _h('td', [_vm._s(node.place)]), " ", _h('td', [_vm._s(node.nodeName)]), " ", _h('td', [_vm._s(node.status)]), " ", _h('td', [_vm._s(node.time)]), " ", _h('td', [_h('button', {
 	      staticClass: "btn btn-primary",
 	      attrs: {
 	        "data-toggle": "modal",
@@ -12764,10 +12761,10 @@
 	        onSearch: function onSearch() {
 	            var _this = this;
 
-	            if (!this.areaSelected || !this.cardSelected || !this.nodeSelected) alert('请选择区域、卡号和节点');else {
+	            if (!this.areaSelected) alert('请选择区域!');else {
 	                var url = '/records?area=' + this.areaSelected;
-	                if (this.cardSelected !== '') url += '&cardNo=' + this.cardSelected;
-	                if (this.nodeSelected !== '') url += '&nodeId=' + this.nodeSelected;
+	                if (this.cardSelected) url += '&cardNo=' + this.cardSelected;
+	                if (this.nodeSelected) url += '&nodeId=' + this.nodeSelected;
 
 	                fetch(url).then(function (response) {
 	                    return response.json();
@@ -12785,7 +12782,7 @@
 	        areaSelected: function areaSelected(newVal) {
 	            var _this2 = this;
 
-	            fetch('/users?area=' + this.areaSelected).then(function (response) {
+	            fetch('/users?area=' + newVal).then(function (response) {
 	                return response.json();
 	            }).then(function (_ref2) {
 	                var data = _ref2.data;
@@ -12796,7 +12793,7 @@
 	                return alert('请求失败');
 	            });
 
-	            fetch('/nodes?area=' + this.areaSelected).then(function (response) {
+	            fetch('/nodes?area=' + newVal).then(function (response) {
 	                return response.json();
 	            }).then(function (_ref3) {
 	                var data = _ref3.data;
@@ -12820,10 +12817,6 @@
 	        });
 	    }
 	}; //
-	//
-	//
-	//
-	//
 	//
 	//
 	//
@@ -12917,11 +12910,7 @@
 	      }
 	    }
 	  }, [_vm._l((_vm.areas), function(area) {
-	    return _h('option', {
-	      domProps: {
-	        "value": area.no
-	      }
-	    }, ["\n                " + _vm._s(area.name) + "\n            "])
+	    return _h('option', ["\n                " + _vm._s(area.no) + "\n            "])
 	  })]), " ", _h('label', {
 	    staticStyle: {
 	      "margin-left": "20px"
@@ -12944,12 +12933,8 @@
 	        })[0]
 	      }
 	    }
-	  }, [_vm._l((_vm.cards), function(card) {
-	    return _h('option', {
-	      domProps: {
-	        "value": card.cardId
-	      }
-	    }, ["\n                " + _vm._s(_vm.node.nodeName) + "\n            "])
+	  }, [_h('option'), " ", _vm._l((_vm.cards), function(card) {
+	    return _h('option', ["\n                " + _vm._s(card) + "\n            "])
 	  })]), " ", _h('label', {
 	    staticStyle: {
 	      "margin-left": "20px"
@@ -12972,7 +12957,11 @@
 	        })[0]
 	      }
 	    }
-	  }, [_vm._l((_vm.nodes), function(node) {
+	  }, [_h('option', {
+	    attrs: {
+	      "value": ""
+	    }
+	  }), " ", _vm._l((_vm.nodes), function(node) {
 	    return _h('option', {
 	      domProps: {
 	        "value": node.nodeId
@@ -12989,7 +12978,7 @@
 	  }, ["查询"])]), " ", " ", _h('table', {
 	    staticClass: "table table-striped"
 	  }, [_vm._m(0), " ", _h('tbody', [_vm._m(1), " ", _vm._l((_vm.records), function(record) {
-	    return _h('tr', [_h('td', ["record.cardNo"]), " ", _h('td', ["record.permissionId"]), " ", _h('td', ["record.nodeId"]), " ", _h('td', ["record.time"])])
+	    return _h('tr', [_h('td', [_vm._s(record.cardNo)]), " ", _h('td', [_vm._s(record.permissionId)]), " ", _h('td', [_vm._s(record.nodeId)]), " ", _h('td', [_vm._s(record.time)])])
 	  })])])])
 	},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;
 	  return _h('thead', [_h('tr', [_h('td', ["卡号"]), " ", _h('td', ["权限ID"]), " ", _h('td', ["节点"]), " ", _h('td', ["时间"])])])

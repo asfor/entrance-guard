@@ -4,11 +4,8 @@
         <form role='form'>
             <label>区域：</label>
             <select class="form-control" v-model='areaSelected'>
-                <option
-                    v-for='area in areas'
-                    :value='area.no'
-                >
-                    {{area.name}}
+                <option v-for='area in areas'>
+                    {{area.no}}
                 </option>
             </select>
 
@@ -72,6 +69,7 @@
                     <td>{{node.place}}</td>
                     <td>{{node.nodeName}}</td>
                     <td>{{node.status}}</td>
+                    <td>{{node.time}}</td>
                     <td>
                         <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" @click='onEdit(index)'>编辑</button>
                         <button class="btn btn-danger" @click='onDelete(index)'>删除</button>
@@ -125,13 +123,13 @@ export default {
 
     methods: {
         onEdit(index) {
-            this.editNodeId = nodes[index].nodeId
-            this.editNodeName = nodes[index].nodeName
+            this.editNodeId = this.nodes[index].nodeId
+            this.editNodeName = this.nodes[index].nodeName
         },
 
         onDelete(index) {
             if(confirm('确定要删除节点？'))
-                fetch(`/nodes?area=${this.areaSelected}&nodeId=${nodes[index].nodeId}`, {method: 'DELETE'})
+                fetch(`/nodes?area=${this.areaSelected}&nodeId=${this.nodes[index].nodeId}`, {method: 'DELETE'})
                     .then(response => response.json())
                     .then(({msg}) => alert(msg))
                     .catch(() => alert('请求失败'))
@@ -152,12 +150,12 @@ export default {
         },
 
         onSearch() {
-            if(!areaSelected)
+            if(!this.areaSelected)
                 alert('请选择区域!')
             else {
                 let url = `/nodes?area=${this.areaSelected}`
 
-                if(this.nodeName !== '')   url += `&nodeName=${this.nodeName}`
+                if(this.nodeName)   url += `&nodeName=${this.nodeName}`
 
                 fetch(url)
                     .then(response => response.json())

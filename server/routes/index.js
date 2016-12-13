@@ -23,7 +23,7 @@ router.post('/commit/:area',
 // 登陆相关，这三个不要改顺序，不然会无限重定向
 router.use('/login', Supervisor.loginPage)
 router.post('/entry', Supervisor.login)
-// router.use(Supervisor.check)
+router.use(Supervisor.check)
 
 // 主体页面和退出
 router.get('/', (req, res) => res.render('index'))
@@ -55,50 +55,50 @@ router.put('/password', Supervisor.resetPassword)
  * 
  * 注意：上线请将其注释！
  */
-router.get('/addTestData',
-    Area.addTestData({
-        no: 11,
-        name: '芙蓉1'
-    }),
+// router.get('/addTestData',
+//     Area.addTestData({
+//         no: 11,
+//         name: '芙蓉1'
+//     }),
 
-    NodeInfo.addTestData({
-        area: 11,
-        nodeId: 103,
-        place: 1,
-        nodeName: '103',
-        status: 0
-    }),
+//     NodeInfo.addTestData({
+//         area: 11,
+//         nodeId: 115,
+//         place: 1,
+//         nodeName: '115',
+//         status: 0
+//     }),
 
-    UserInfo.addTestData({
-        area: 11,
-        cardNo: 1234567,
-        personId: 'ITT13080',
-        name: '韩英俊',
-        phone: '18064566666'
-    }),
+//     UserInfo.addTestData({
+//         area: 11,
+//         cardNo: 47298739,
+//         personId: 'ITT13047',
+//         name: '宝宝',
+//         phone: '18064566666'
+//     }),
 
-    UserPermission.addTestData({
-        area: 11,
-        id: 111,
-        cardNo: 1234567,
-        personId: 'ITT13080',
-        name: '韩英俊',
-        nodeId: 103,
-        type: 1,
-        startPeriod: '2012-02-02',
-        endPeriod: '2012-02-09',
-        startTime: '13:00',
-        endTime: '14:00'
-    }),
+//     UserPermission.addTestData({
+//         area: 11,
+//         id: 111,
+//         cardNo: 47298739,
+//         personId: 'ITT13047',
+//         name: '宝宝',
+//         nodeId: 115,
+//         type: 1,
+//         startPeriod: '2012-02-02',
+//         endPeriod: '2012-02-09',
+//         startTime: '13:00',
+//         endTime: '14:00'
+//     }),
 
-    UserRecord.addTestData({
-        area: 11,
-        cardNo: 1234567,
-        permissionId: 111,
-        nodeId: 103
-    }),
+//     UserRecord.addTestData({
+//         area: 11,
+//         cardNo: 47298739,
+//         permissionId: 111,
+//         nodeId: 115
+//     }),
 
-    (req, res) => res.send('completed!')
-)
+//     (req, res) => res.send('completed!')
+// )
 
 module.exports = router

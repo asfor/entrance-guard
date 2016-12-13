@@ -4,11 +4,8 @@
         <form role='form'>
             <label>区域：</label>
             <select class="form-control" v-model='areaSelected'>
-                <option
-                    v-for='area in areas'
-                    :value='area.no'
-                >
-                    {{area.name}}
+                <option v-for='area in areas'>
+                    {{area.no}}
                 </option>
             </select>
 
@@ -143,10 +140,13 @@ export default {
 
     methods: {
         onSearch() {
-            if(!areaSelected)
+            if(!this.areaSelected)
                 alert('请选择区域!')
             else {
-                fetch(`/users?area=${this.areaSelected}&name=${this.name}`)
+                let url = `/users?area=${this.areaSelected}`
+                if(this.name) url += `&name=${this.name}`
+
+                fetch(url)
                     .then(response => response.json())
                     .then(({data}) => this.users = data)
                     .catch(() => alert('请求失败'))
@@ -182,7 +182,7 @@ export default {
 
         onDelete(cardNo) {
             if(confirm('确定要删除用户?'))
-                fetch(`/users?cardNo=${cardNo}`, {method: 'DELETE'})
+                fetch(`/users?area=${this.areaSelected}&cardNo=${cardNo}`, {method: 'DELETE'})
                     .then(response => response.json())
                     .then(({msg}) => alert(msg))
                     .catch(() => alert('请求失败'))

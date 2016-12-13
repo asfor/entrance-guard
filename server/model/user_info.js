@@ -17,28 +17,6 @@ exports.get = (req, res) => {
     })
 }
 
-// exports.set = (req, res) => {
-//     res.setHeader('Content-Type', 'application/json')
-
-//     UserInfo.update({area: req.body.area, cardNo: req.body.cardNo}, {$set: req.body}, err => {
-//         if(err)
-//             res.status(500).send({msg: '修改失败，请重试\n' + err})
-//         else
-//             res.send(JSON.stringify({msg: '修改成功'}))
-//     })
-// }
-
-// exports.del = (req, res) => {
-//     res.setHeader('Content-Type', 'application/json')
-
-//     UserInfo.remove({area: req.query.area, cardNo: req.query.cardNo}, err => {
-//         if(err)
-//             res.status(500).send({msg: '删除失败，请重试\n' + err})
-//         else
-//             res.send(JSON.stringify({msg: '删除成功'}))
-//     })
-// }
-
 exports.set = (req, res) => {
     const body = JSON.parse(JSON.stringify(req.body))
     const {area, cardNo} = body
@@ -53,7 +31,8 @@ exports.set = (req, res) => {
 
     areaCache.userInfo.set.push({
         cardNo: cardNo,
-        content: body
+        content: body,
+        time: Date.now().toString()
     })
 
     res.setHeader('Content-Type', 'application/json')

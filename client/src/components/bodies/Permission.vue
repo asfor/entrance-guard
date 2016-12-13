@@ -4,16 +4,14 @@
         <form role="form">
             <label>区域：</label>
             <select class="form-control" v-model='areaSelected'>
-                <option
-                    v-for='area in areas'
-                    :value='area.no'
-                >
-                    {{area.name}}
+                <option v-for='area in areas'>
+                    {{area.no}}
                 </option>
             </select>
 
             <label style="margin-left: 20px;">姓名: </label>
             <select class="form-control" v-model='userSelected'>
+                <option value=""></option>
                 <option
                     v-for='user in users'
                     :value='user.personId'
@@ -24,6 +22,7 @@
 
             <label style="margin-left: 20px;">节点: </label>
             <select class="form-control" v-model='nodeSelected'>
+                <option value=""></option>
                 <option
                     v-for='node in nodes'
                     :value='node.nodeId'
@@ -193,10 +192,14 @@ export default {
         },
 
         onSearch() {
-            if(!this.areaSelected || !this.userSelected || !this.nodeSelected)
-                alert('请选择区域、用户和节点')
+            if(!this.areaSelected)
+                alert('请选择区域')
             else {
-                fetch(`/permissions?area=${this.areaSelected}&personId=${this.userSelected}&nodeId=${this.nodeSelected}`)
+                let url = `/permissions?area=${this.areaSelected}`
+                if(this.userSelected)   url += `&personId=${this.userSelected}`
+                if(this.nodeSelected)   url += `&nodeId=${this.nodeSelected}`
+
+                fetch(url)
                     .then(response => response.json())
                     .then(({data}) => this.permissions = data)
                     .catch(() => alert('请求失败'))
@@ -214,12 +217,12 @@ export default {
 
     watch: {
         areaSelected(newVal) {
-            fetch(`/users?area=${this.areaSelected}`)
+            fetch(`/users?area=${newVal}`)
                 .then(response => response.json())
                 .then(({data}) => this.users = data)
                 .catch(() => alert('请求失败'))
 
-            fetch(`/nodes?area=${this.areaSelected}`)
+            fetch(`/nodes?area=${newVal}`)
                 .then(response => response.json())
                 .then(({data}) => this.nodes = data)
                 .catch(() => alert('请求失败'))

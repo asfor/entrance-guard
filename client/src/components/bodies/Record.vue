@@ -4,26 +4,22 @@
         <form role="form">
             <label>区域：</label>
             <select class="form-control" v-model='areaSelected'>
-                <option
-                    v-for='area in areas'
-                    :value='area.no'
-                >
-                    {{area.name}}
+                <option v-for='area in areas'>
+                    {{area.no}}
                 </option>
             </select>
 
             <label style="margin-left: 20px;">卡号: </label>
             <select class="form-control" v-model='cardSelected'>
-                <option
-                    v-for='card in cards'
-                    :value='card.cardId'
-                >
-                    {{node.nodeName}}
+                <option></option>
+                <option v-for='card in cards'>
+                    {{card}}
                 </option>
             </select>
 
             <label style="margin-left: 20px;">节点ID: </label>
             <select class="form-control" v-model='nodeSelected'>
+                <option value=""></option>
                 <option
                     v-for='node in nodes'
                     :value='node.nodeId'
@@ -55,10 +51,10 @@
                 </tr>
 
                 <tr v-for='record in records'>
-                    <td>record.cardNo</td>
-                    <td>record.permissionId</td>
-                    <td>record.nodeId</td>
-                    <td>record.time</td>
+                    <td>{{record.cardNo}}</td>
+                    <td>{{record.permissionId}}</td>
+                    <td>{{record.nodeId}}</td>
+                    <td>{{record.time}}</td>
                 </tr>
             </tbody>
         </table>
@@ -84,12 +80,12 @@ export default {
 
     methods: {
         onSearch() {
-            if(!this.areaSelected || !this.cardSelected || !this.nodeSelected)
-                alert('请选择区域、卡号和节点')
+            if(!this.areaSelected)
+                alert('请选择区域!')
             else {
                 let url = `/records?area=${this.areaSelected}`
-                if(this.cardSelected !== '')    url += `&cardNo=${this.cardSelected}`
-                if(this.nodeSelected !== '')    url += `&nodeId=${this.nodeSelected}`
+                if(this.cardSelected)    url += `&cardNo=${this.cardSelected}`
+                if(this.nodeSelected)    url += `&nodeId=${this.nodeSelected}`
 
                 fetch(url)
                     .then(response => response.json())
@@ -101,12 +97,12 @@ export default {
 
     watch: {
         areaSelected(newVal) {
-            fetch(`/users?area=${this.areaSelected}`)
+            fetch(`/users?area=${newVal}`)
                 .then(response => response.json())
                 .then(({data}) => this.cards = data.map(user => user.cardNo))
                 .catch(() => alert('请求失败'))
 
-            fetch(`/nodes?area=${this.areaSelected}`)
+            fetch(`/nodes?area=${newVal}`)
                 .then(response => response.json())
                 .then(({data}) => this.nodes = data)
                 .catch(() => alert('请求失败'))

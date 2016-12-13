@@ -8,7 +8,7 @@
 2. 下载 Github 仓库 (`git clone https://github.com/asfor/graduation-design.git`)
 3. 运行 `npm install` 来安装 npm 依赖包
 4. 使用 `npm install -g webpack webpack-dev-server` 全局安装 webpack 与 webpack 开发服务器
-5. 在 mongoDB 的根目录下运行 `bin/mongod` 来开启 mongoDB
+5. 在 mongoDB 的根目录下运行 `cd bin && mongod` 来开启 mongoDB
 6. 现在，你可以进行以下操作：
 
 ``` bash
