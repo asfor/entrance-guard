@@ -30,22 +30,6 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>3</td>
-                    <td>518</td>
-                    <td>装修中</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>518</td>
-                    <td>装修中</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>518</td>
-                    <td>装修中</td>
-                </tr>
-
                 <tr v-for='room in rooms'>
                     <td>{{room.floor}}</td>
                     <td>{{room.ID}}</td>

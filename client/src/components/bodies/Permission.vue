@@ -48,14 +48,6 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>ITT13074</td>
-                    <td>史宇韬</td>
-                    <td>史宇韬</td>
-                    <td>史宇韬</td>
-                    <td><button class="btn btn-danger">删除</button></td>
-                </tr>
-
                 <tr v-for='permission in permissions'>
                     <td>{{permission.personId}}</td>
                     <td>{{permission.name}}</td>

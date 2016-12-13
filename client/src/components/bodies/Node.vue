@@ -30,40 +30,6 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>123123</td>
-                    <td>3</td>
-                    <td>518</td>
-                    <td>装修中</td>
-                    <td>2010-00-00</td>
-                    <td>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">编辑</button>
-                        <button class="btn btn-danger">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>123123</td>
-                    <td>3</td>
-                    <td>518</td>
-                    <td>装修中</td>
-                    <td>2010-00-00</td>
-                    <td>
-                        <button class="btn btn-primary">编辑</button>
-                        <button class="btn btn-danger">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>123123</td>
-                    <td>3</td>
-                    <td>518</td>
-                    <td>装修中</td>
-                    <td>2010-00-00</td>
-                    <td>
-                        <button class="btn btn-primary">编辑</button>
-                        <button class="btn btn-danger">删除</button>
-                    </td>
-                </tr>
-
                 <tr v-for='(node, index) in nodes'>
                     <td>{{node.nodeId}}</td>
                     <td>{{node.place}}</td>

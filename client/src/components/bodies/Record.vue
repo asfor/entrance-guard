@@ -43,13 +43,6 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>871928741</td>
-                    <td>312312</td>
-                    <td>芙蓉1#518</td>
-                    <td>2012-02-02</td>
-                </tr>
-
                 <tr v-for='record in records'>
                     <td>{{record.cardNo}}</td>
                     <td>{{record.permissionId}}</td>

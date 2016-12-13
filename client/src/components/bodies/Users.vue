@@ -29,37 +29,6 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>123123</td>
-                    <td>ITT13074</td>
-                    <td>史宇韬</td>
-                    <td>18064563100</td>
-                    <td>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">编辑</button>
-                        <button class="btn btn-danger">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>123123</td>
-                    <td>ITT13074</td>
-                    <td>史宇韬</td>
-                    <td>18064563100</td>
-                    <td>
-                        <button class="btn btn-primary">编辑</button>
-                        <button class="btn btn-danger">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>123123</td>
-                    <td>ITT13074</td>
-                    <td>史宇韬</td>
-                    <td>18064563100</td>
-                    <td>
-                        <button class="btn btn-primary">编辑</button>
-                        <button class="btn btn-danger">删除</button>
-                    </td>
-                </tr>
-
                 <tr v-for='(user, index) in users'>
                     <td>{{user.cardNo}}</td>
                     <td>{{user.personId}}</td>
