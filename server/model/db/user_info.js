@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
 var schemas = new Schema({
-    area: Number,    
+    area: String,    
     cardNo: Number,
 
     personId: {

@@ -1,5 +1,5 @@
-// const webpack = require('webpack')
-var path = require('path')
+const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
 	// devtool: 'eval-source-map',
@@ -45,13 +45,13 @@ module.exports = {
 		    }
 		]
 	},
-	// plugins: [
-	// 	new webpack.optimize.UglifyJsPlugin({
-	// 		compress: {
-	// 			warnings: false
-	// 		}
-	// 	})
-	// ],
+	plugins: [
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false
+			}
+		})
+	],
 	devServer: {
 		contentBase: "./client",
 		colors: true,

@@ -57,34 +57,33 @@ router.put('/password', Supervisor.resetPassword)
  */
 // router.get('/addTestData',
 //     Area.addTestData({
-//         no: 11,
-//         name: '芙蓉1'
+//         no: '凌云1'
 //     }),
 
 //     NodeInfo.addTestData({
-//         area: 11,
-//         nodeId: 115,
-//         place: 1,
-//         nodeName: '115',
-//         status: 0
+//         area: '凌云1',
+//         nodeId: 111,
+//         place: 11,
+//         nodeName: '101',
+//         status: 1
 //     }),
 
 //     UserInfo.addTestData({
-//         area: 11,
-//         cardNo: 47298739,
-//         personId: 'ITT13047',
-//         name: '宝宝',
-//         phone: '18064566666'
+//         area: '凌云1',
+//         cardNo: 47198731,
+//         personId: 'ITT23009',
+//         name: '宋萨',
+//         phone: '18064566712'
 //     }),
 
 //     UserPermission.addTestData({
-//         area: 11,
-//         id: 111,
-//         cardNo: 47298739,
-//         personId: 'ITT13047',
-//         name: '宝宝',
-//         nodeId: 115,
-//         type: 1,
+//         area: '凌云1',
+//         id: 113,
+//         cardNo: 47198731,
+//         personId: 'ITT23009',
+//         name: '宋萨',
+//         nodeId: 111,
+//         type: 3,
 //         startPeriod: '2012-02-02',
 //         endPeriod: '2012-02-09',
 //         startTime: '13:00',
@@ -92,10 +91,10 @@ router.put('/password', Supervisor.resetPassword)
 //     }),
 
 //     UserRecord.addTestData({
-//         area: 11,
-//         cardNo: 47298739,
-//         permissionId: 111,
-//         nodeId: 115
+//         area: '凌云1',
+//         cardNo: 47198731,
+//         permissionId: 113,
+//         nodeId: 111
 //     }),
 
 //     (req, res) => res.send('completed!')

@@ -1,0 +1,6 @@
+{ "_id" : { "$oid" : "58539076e9d1841600e42a7b" }, "area" : "芙蓉1", "nodeId" : 115, "place" : 1, "nodeName" : "会议室", "status" : 0, "time" : "1481871478709", "__v" : 0 }
+{ "_id" : { "$oid" : "585392a056f17e36c8755430" }, "area" : "芙蓉1", "nodeId" : 116, "place" : 1, "nodeName" : "卫生间", "status" : 0, "time" : "1481872032130", "__v" : 0 }
+{ "_id" : { "$oid" : "58539344b7731b3a3cee799e" }, "area" : "芙蓉1", "nodeId" : 117, "place" : 1, "nodeName" : "楼梯间", "status" : 1, "time" : "1481872196717", "__v" : 0 }
+{ "_id" : { "$oid" : "5853c6e60933d93ed03f3594" }, "area" : "凌云1", "nodeId" : 117, "place" : 1, "nodeName" : "你好房间", "status" : 1, "time" : "1481885414756", "__v" : 0 }
+{ "_id" : { "$oid" : "5853c75d92c8af3ab4bf4e64" }, "area" : "凌云1", "nodeId" : 1171, "place" : 11, "nodeName" : "搜按间", "status" : 1, "time" : "1481885533174", "__v" : 0 }
+{ "_id" : { "$oid" : "5853cad04abf353cc0eb0683" }, "area" : "凌云1", "nodeId" : 111, "place" : 11, "nodeName" : "101", "status" : 1, "time" : "1481886416867", "__v" : 0 }

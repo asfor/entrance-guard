@@ -26,7 +26,7 @@ exports.set = (req, res) => {
 
     areaCache.nodeInfo.set.push({
         nodeId: nodeId,
-        content: {nodeName: nodeName}
+        content: {nodeName: nodeName},
         time: Date.now().toString()
     })
 
