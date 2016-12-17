@@ -1,6 +1,0 @@
-{ "_id" : { "$oid" : "58539076e9d1841600e42a7e" }, "area" : "芙蓉1", "cardNo" : 47298739, "permissionId" : 111, "nodeId" : 115, "time" : "1481871478822", "__v" : 0 }
-{ "_id" : { "$oid" : "585392a056f17e36c8755433" }, "area" : "芙蓉1", "cardNo" : 47298738, "permissionId" : 112, "nodeId" : 116, "time" : "1481872032327", "__v" : 0 }
-{ "_id" : { "$oid" : "58539344b7731b3a3cee79a1" }, "area" : "芙蓉1", "cardNo" : 47298737, "permissionId" : 113, "nodeId" : 117, "time" : "1481872196904", "__v" : 0 }
-{ "_id" : { "$oid" : "5853c6e60933d93ed03f3597" }, "area" : "凌云1", "cardNo" : 47398737, "permissionId" : 113, "nodeId" : 117, "time" : "1481885414966", "__v" : 0 }
-{ "_id" : { "$oid" : "5853c75d92c8af3ab4bf4e67" }, "area" : "凌云1", "cardNo" : 47198737, "permissionId" : 123, "nodeId" : 1171, "time" : "1481885533388", "__v" : 0 }
-{ "_id" : { "$oid" : "5853cad14abf353cc0eb0686" }, "area" : "凌云1", "cardNo" : 47198731, "permissionId" : 113, "nodeId" : 111, "time" : "1481886417096", "__v" : 0 }
