@@ -175,6 +175,7 @@ export default {
             }
 
             fetch('/permissions', {
+                credentials: 'same-origin',
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -191,7 +192,7 @@ export default {
                 if(this.userSelected)   url += `&personId=${this.userSelected}`
                 if(this.nodeSelected)   url += `&nodeId=${this.nodeSelected}`
 
-                fetch(url)
+                fetch(url, {credentials: 'same-origin'})
                     .then(response => response.json())
                     .then(({data}) => this.permissions = data)
                     .catch(() => alert('请求失败'))
@@ -200,21 +201,23 @@ export default {
 
         onDelete(id) {
             if(confirm('是否要删除权限？'))
-                fetch(`/permissions?area=${this.areaSelected}&id=${id}`, {method: 'DELETE'})
-                    .then(response => response.json())
-                    .then(({msg}) => alert(msg))
-                    .catch(() => alert('请求失败'))
+                fetch(`/permissions?area=${this.areaSelected}&id=${id}`, {
+                    credentials: 'same-origin',
+                    method: 'DELETE'
+                }).then(response => response.json())
+                  .then(({msg}) => alert(msg))
+                  .catch(() => alert('请求失败'))
         }
     },
 
     watch: {
         areaSelected(newVal) {
-            fetch(`/users?area=${newVal}`)
+            fetch(`/users?area=${newVal}`, {credentials: 'same-origin'})
                 .then(response => response.json())
                 .then(({data}) => this.users = data)
                 .catch(() => alert('请求失败'))
 
-            fetch(`/nodes?area=${newVal}`)
+            fetch(`/nodes?area=${newVal}`, {credentials: 'same-origin'})
                 .then(response => response.json())
                 .then(({data}) => this.nodes = data)
                 .catch(() => alert('请求失败'))
@@ -230,7 +233,7 @@ export default {
     },
 
     mounted() {
-        fetch('/areas')
+        fetch('/areas', {credentials: 'same-origin'})
             .then(response => response.json())
             .then(({data}) => this.areas = data)
             .catch(() => alert('请求失败'))

@@ -115,7 +115,7 @@ export default {
                 let url = `/users?area=${this.areaSelected}`
                 if(this.name) url += `&name=${this.name}`
 
-                fetch(url)
+                fetch(url, {credentials: 'same-origin'})
                     .then(response => response.json())
                     .then(({data}) => this.users = data)
                     .catch(() => alert('请求失败'))
@@ -141,6 +141,7 @@ export default {
             }
 
             fetch('/users', {
+                credentials: 'same-origin',
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
@@ -151,15 +152,17 @@ export default {
 
         onDelete(cardNo) {
             if(confirm('确定要删除用户?'))
-                fetch(`/users?area=${this.areaSelected}&cardNo=${cardNo}`, {method: 'DELETE'})
-                    .then(response => response.json())
-                    .then(({msg}) => alert(msg))
-                    .catch(() => alert('请求失败'))
+                fetch(`/users?area=${this.areaSelected}&cardNo=${cardNo}`, {
+                    credentials: 'same-origin',
+                    method: 'DELETE'
+                }).then(response => response.json())
+                  .then(({msg}) => alert(msg))
+                  .catch(() => alert('请求失败'))
         }
     },
 
     mounted() {
-        fetch('/areas')
+        fetch('/areas', {credentials: 'same-origin'})
             .then(response => response.json())
             .then(({data}) => this.areas = data)
             .catch(() => alert('请求失败'))

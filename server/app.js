@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(session({
   secret: 'build by Armor',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {maxAge: 1000 * 60 * 30}
 }))
 

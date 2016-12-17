@@ -80,7 +80,7 @@ export default {
                 if(this.cardSelected)    url += `&cardNo=${this.cardSelected}`
                 if(this.nodeSelected)    url += `&nodeId=${this.nodeSelected}`
 
-                fetch(url)
+                fetch(url, {credentials: 'same-origin'})
                     .then(response => response.json())
                     .then(({data}) => this.records = data)
                     .catch(() => alert('请求失败'))
@@ -90,12 +90,12 @@ export default {
 
     watch: {
         areaSelected(newVal) {
-            fetch(`/users?area=${newVal}`)
+            fetch(`/users?area=${newVal}`, {credentials: 'same-origin'})
                 .then(response => response.json())
                 .then(({data}) => this.cards = data.map(user => user.cardNo))
                 .catch(() => alert('请求失败'))
 
-            fetch(`/nodes?area=${newVal}`)
+            fetch(`/nodes?area=${newVal}`, {credentials: 'same-origin'})
                 .then(response => response.json())
                 .then(({data}) => this.nodes = data)
                 .catch(() => alert('请求失败'))
@@ -103,7 +103,7 @@ export default {
     },
 
     mounted() {
-        fetch('/areas')
+        fetch('/areas', {credentials: 'same-origin'})
             .then(response => response.json())
             .then(({data}) => this.areas = data)
                 .catch(() => alert('请求失败'))

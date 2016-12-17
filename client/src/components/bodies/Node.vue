@@ -95,14 +95,17 @@ export default {
 
         onDelete(index) {
             if(confirm('确定要删除节点？'))
-                fetch(`/nodes?area=${this.areaSelected}&nodeId=${this.nodes[index].nodeId}`, {method: 'DELETE'})
-                    .then(response => response.json())
-                    .then(({msg}) => alert(msg))
-                    .catch(() => alert('请求失败'))
+                fetch(`/nodes?area=${this.areaSelected}&nodeId=${this.nodes[index].nodeId}`, {
+                    credentials: 'same-origin',
+                    method: 'DELETE'
+                }).then(response => response.json())
+                  .then(({msg}) => alert(msg))
+                  .catch(() => alert('请求失败'))
         },
 
         onSave(nodeId) {
             fetch('/nodes', {
+                credentials: 'same-origin',
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -123,7 +126,7 @@ export default {
 
                 if(this.nodeName)   url += `&nodeName=${this.nodeName}`
 
-                fetch(url)
+                fetch(url, {credentials: 'same-origin'})
                     .then(response => response.json())
                     .then(({data}) => this.nodes = data)
                     .catch(() => alert('请求失败'))
@@ -132,7 +135,7 @@ export default {
     },
 
     mounted() {
-        fetch('/areas')
+        fetch('/areas', {credentials: 'same-origin'})
             .then(response => response.json())
             .then(({data}) => this.areas = data)
             .catch(() => alert('请求失败'))
