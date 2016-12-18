@@ -1,5 +1,5 @@
-var UserPermission = require('./db/user_permission')
-var {cache, resetArea, handle} = require('./common')
+const UserPermission = require('./db/user_permission')
+const {cache, resetArea, handle} = require('./common')
 
 exports.get = (req, res) => {
     res.setHeader('Content-Type', 'application/json')

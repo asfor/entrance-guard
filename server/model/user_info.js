@@ -1,5 +1,5 @@
-var UserInfo = require('./db/user_info')
-var {cache, resetArea, handle} = require('./common')
+const UserInfo = require('./db/user_info')
+const {cache, resetArea, handle} = require('./common')
 
 exports.get = (req, res) => {
     res.setHeader('Content-Type', 'application/json')

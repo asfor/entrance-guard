@@ -1,17 +1,17 @@
-var express = require('express')
-var Supervisor = require('../model/supervisor')
-var Area = require('../model/area')
-var NodeInfo = require('../model/node_info')
-var UserInfo = require('../model/user_info')
-var UserPermission = require('../model/user_permission')
-var UserRecord = require('../model/user_record')
-var {extractCache} = require('../model/common')
+const express = require('express')
+const Supervisor = require('../model/supervisor')
+const Area = require('../model/area')
+const NodeInfo = require('../model/node_info')
+const UserInfo = require('../model/user_info')
+const UserPermission = require('../model/user_permission')
+const UserRecord = require('../model/user_record')
+const {extractCache} = require('../model/common')
 
-var router = express.Router()
+const router = express.Router()
 
 // PC端接口
-router.get('/extractCache/:area', extractCache)
-router.post('/commit/:area',
+router.get('/extractCache/:area/:secret', extractCache)
+router.post('/commit/:area/:secret',
     Area.handle,
     NodeInfo.handle,
     UserInfo.handle,

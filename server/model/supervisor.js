@@ -1,14 +1,6 @@
-var crypto = require('crypto')
-var Supervisor = require('./db/supervisor')
-var {adminID, secret} = require('../config')
-
-// 采用 sha256 散列算法和 hex 编码
-function encrypt(value) {
-    return crypto
-        .createHmac('sha256', secret)
-        .update(value)
-        .digest('hex')
-}
+const Supervisor = require('./db/supervisor')
+const {encrypt} = require('./common')
+const {adminID} = require('../config')
 
 // 登陆页
 exports.loginPage = (req, res) => {

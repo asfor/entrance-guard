@@ -1,5 +1,5 @@
-var NodeInfo = require('./db/node_info')
-var {cache, resetArea, handle} = require('./common')
+const NodeInfo = require('./db/node_info')
+const {cache, resetArea, handle} = require('./common')
 
 exports.get = (req, res) => {
     res.setHeader('Content-Type', 'application/json')

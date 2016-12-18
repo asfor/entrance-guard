@@ -1,4 +1,5 @@
-var Area = require('./db/area')
+const Area = require('./db/area')
+const {encrypt, mapQuery, mapBind} = require('./common')
 
 exports.get = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
@@ -12,20 +13,32 @@ exports.get = (req, res) => {
 }
 
 exports.handle = (req, res, next) => {
-    const area = req.params.area + ''
+    const {area, secret} = req.params
+    const _area = mapQuery(req.ip)
 
-    Area.find({}, (err, docs) => {
+    if(_area)
+        if(_area !== area)
+            return res.status(403).send({msg: 'IP与绑定映射地址不符'})
+    else
+        mapBind(ip, area)
+
+    Area.findOne({no: area}, (err, doc) => {
         if(err)
-            console.error('Area Search: \n' + err)
+            res.end('Area Search: \n' + err)
         else
-            for(const _area of docs.map(area => area.no))
-                if(area === _area + '')
+            if(doc)
+                if(encrypt(secret) === doc.key)
                     return next()
+                else
+                    return res.status(403).send({msg: '密钥验证错误'})
 
-        Area.create({no: area}, err => {
+        Area.create({
+            no: area,
+            key: encrypt(secret)
+        }, err => {
             if(err)
-                console.error('Area Create: \n' + err)
-            
+                return res.end('Area Create: \n' + err)
+
             next()
         })
     })
