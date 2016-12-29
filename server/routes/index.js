@@ -20,7 +20,7 @@ router.post('/commit/:area/:secret',
     (req, res) => res.end('It\'s OK!')
 )
 
-// 登陆相关，这三个不要改顺序，不然会无限重定向
+// 此处有魔法，不要乱动
 router.use('/login', Supervisor.loginPage)
 router.post('/entry', Supervisor.login)
 router.use(Supervisor.check)
